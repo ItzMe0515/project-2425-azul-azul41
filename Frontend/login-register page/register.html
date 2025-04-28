@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="assets/css/login-register.css">
+    <link rel="icon" href="assets/images/R.jpg">
+</head>
+<body>
+<div class="azul-bg"></div>
+    <form action="http://localhost:8080/js/register.js" method="post" id="registerForm">
+        <h1>Register</h1>
+        <label for="email">Email Address:</label><br>
+        <input type="email" id="email" name="email" ><br>
+        <div id="error_email"></div><br>
+
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" ><br>
+        <div id="error_user"></div><br>
+
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" ><br>
+        <div id="error_pass"></div><br>
+
+        <label for="confirm_password">Confirm Password:</label><br>
+        <input type="password" id="confirm_password" name="confirm_password" ><br>
+        <div id="error_conf_pass"></div><br>
+
+        <label for="last_visit">Date of Last Stay in Portugal:</label><br>
+        <input type="date" id="last_visit" name="last_visit"><br>
+        <div id="error_last_visit"></div><br>
+
+        <input type="submit" value="Register">
+        <div id="error_backend"></div>
+        <p>Already have an account? <a href="index.html" id="loginLink">Login here.</a></p>
+    </form>
+<script src="js/register.js"></script>
+</body>
+</html>

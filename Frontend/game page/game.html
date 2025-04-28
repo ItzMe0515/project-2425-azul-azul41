@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Azul</title>
+    <link href="assets/css/game.css" rel="stylesheet">
+    <link rel="icon" href="assets/images/R.jpg">
+</head>
+<body>
+<h2>Azul Player Board</h2>
+<div class="board">
+    <!-- Pattern Lines -->
+    <div class="pattern-lines">
+        <!-- 1 to 5 tiles per row -->
+        <div class="pattern-line">
+            <div class="tile-slot" draggable="true"></div>
+        </div>
+        <div class="pattern-line">
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+        </div>
+        <div class="pattern-line">
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+        </div>
+        <div class="pattern-line">
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+        </div>
+        <div class="pattern-line">
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+        </div>
+    </div>
+
+    <!-- Wall -->
+    <div>
+        <div class="wall">
+            <!-- 5x5 slots -->
+            <div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div>
+            <div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div>
+            <div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div>
+            <div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div>
+            <div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div><div class="tile-slot"></div>
+        </div>
+
+        <!-- Floor line -->
+        <div class="floor-line">
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+            <div class="tile-slot"></div>
+        </div>
+    </div>
+</div>
+
+<h3>Available Tiles</h3>
+<div style="display: flex; gap: 10px;">
+    <div class="tile blue" draggable="true"></div>
+    <div class="tile red" draggable="true"></div>
+    <div class="tile yellow" draggable="true"></div>
+    <div class="tile black" draggable="true"></div>
+    <div class="tile teal" draggable="true"></div>
+</div>
+</body>
+<script src="js/game.js"></script>
+</html>

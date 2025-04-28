@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="assets/css/login-register.css">
+  <link rel="icon" href="assets/images/R.jpg">
+</head>
+<body>
+<div class="azul-bg"></div>
+<form action="http://localhost:8080/js/register.js" method="post" id="loginForm">
+  <h1>Login</h1>
+  <label for="email">Email Address:</label><br>
+  <input type="email" id="email" name="email" required><br>
+  <div id="error_email"></div><br>
+
+  <label for="password">Password:</label><br>
+  <input type="password" id="password" name="password" required><br>
+  <div id="error_pass"></div><br>
+
+  <input type="submit" value="Login">
+  <div id="error_backend"></div>
+  <p>Don't have an account yet? <a href="register.html" id="registerLink">Register here.</a></p>
+
+  <div class="icon-nav-login">
+    <a class="footer-icon" id="team-icon" href="../team/team.html" title="Team Overview">
+      <span class="footer-tooltip">Team</span>
+      <!-- Simple SVG: three people, representing a team -->
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="#005377" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="6" cy="10" r="3.5"/>
+        <circle cx="22" cy="10" r="3.5"/>
+        <circle cx="14" cy="14" r="4"/>
+        <ellipse cx="6" cy="18.5" rx="5" ry="2.5"/>
+        <ellipse cx="22" cy="18.5" rx="5" ry="2.5"/>
+        <ellipse cx="14" cy="22" rx="7" ry="3.5"/>
+      </svg>
+    </a>
+  </div>
+
+</form>
+<script src="js/login.js"></script>
+</body>
+</html>
