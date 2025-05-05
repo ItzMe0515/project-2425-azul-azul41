@@ -20,7 +20,7 @@ internal class TileFactory : ITileFactory
             _displays.Add(new FactoryDisplay(_tableCenter));
         }
 
-        _tableCenter.AddStartingTile();
+        //_tableCenter.AddStartingTile();
     }
 
     public ITileBag Bag => _bag;
@@ -80,15 +80,6 @@ internal class TileFactory : ITileFactory
             }
         }
     }
-
-
-
-
-
-
-
-
-
 
     public IReadOnlyList<TileType> TakeTiles(Guid displayId, TileType tileType)
     {

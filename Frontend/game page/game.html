@@ -2,28 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Azul Game</title>
+    <title>Azul Online</title>
     <link rel="stylesheet" href="assets/css/game.css">
 </head>
 <body>
 <div class="azul-bg"></div>
 <div id="game-root">
     <header>
-        <h1>Azul</h1>
+        <h1>Azul Online</h1>
         <div id="game-info">
             <span id="game-id"></span>
-            <span id="current-turn"></span>
+            <span id="round-info"></span>
+            <span id="turn-indicator"></span>
         </div>
     </header>
     <main>
-        <section id="factories-section">
-            <h2>Factories</h2>
-            <div id="factories"></div>
-            <h3>Center</h3>
-            <div id="center"></div>
+        <section id="factory-area">
+            <div id="factory-circle">
+                <!-- Factories and center will be rendered here -->
+            </div>
         </section>
         <section id="boards-section">
-            <h2>Player Boards</h2>
             <div id="boards"></div>
         </section>
     </main>
@@ -31,6 +30,7 @@
         <button id="leave-game">Leave Game</button>
     </footer>
 </div>
+<div id="notification"></div>
 <script src="js/game.js"></script>
 </body>
 </html>

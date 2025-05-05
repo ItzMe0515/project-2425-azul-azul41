@@ -1,111 +1,144 @@
 :root {
-    --azul-primary: #005377;
-    --azul-secondary: #7a9ba0;
-    --azul-accent: #f4a261;
-    --text-primary: #333;
-    --bg-light: #eaf4f4;
-    --bg-white: rgba(255, 255, 255, 0.98);
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --azul-blue: #005377;
+    --azul-gold: #f4a261;
+    --azul-bg: #eaf4f4;
+    --azul-white: #fff;
+    --azul-light: #f7fafc;
+    --azul-shadow: 0 2px 16px rgba(0,83,119,0.08);
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Background */
 body, html {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    font-family: var(--font-family);
+    font-family: var(--font-main);
+    background: var(--azul-bg);
 }
 
 .azul-bg {
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    background-image: url("../images/R.jpg");
-    background-size: cover;
-    background-position: center;
+    background: url("../images/azul-bg.jpg") center/cover no-repeat;
+    filter: blur(3px) brightness(0.96);
     z-index: 0;
-    filter: blur(2.5px) brightness(0.96);
     pointer-events: none;
 }
 
 #game-root {
     position: relative;
     z-index: 1;
-    max-width: 1300px;
+    max-width: 1400px;
     margin: auto;
-    padding: 32px 12px 24px 12px;
-    background: var(--bg-white);
+    padding: 24px 8px 24px 8px;
+    background: var(--azul-white);
     border-radius: 18px;
-    box-shadow: 0 0 30px rgba(0, 55, 123, 0.18);
-    border: 5px solid var(--azul-primary);
+    box-shadow: var(--azul-shadow);
+    border: 5px solid var(--azul-blue);
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 h1 {
-    color: var(--azul-primary);
+    color: var(--azul-blue);
     margin: 0 0 6px 0;
     letter-spacing: 1px;
 }
 
 #game-info {
-    color: var(--azul-secondary);
+    color: var(--azul-blue);
     font-size: 1.1em;
     font-weight: 500;
+    display: flex;
+    gap: 18px;
 }
 
 main {
     display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    justify-content: space-between;
-}
-
-#factories-section, #boards-section {
-    flex: 1 1 420px;
-}
-
-#factories, #center {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-
-.factory, .center-tile {
-    background: #fff;
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: 0 2px 8px rgba(0,83,119,0.08);
-    min-width: 80px;
-    min-height: 80px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    border: 2px solid var(--azul-secondary);
 }
 
-.center-tile {
-    min-width: 38px;
-    min-height: 38px;
-    padding: 6px;
+#factory-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
 }
 
-.factory-tile, .center-tile {
+#factory-circle {
+    position: relative;
+    width: 480px;
+    height: 480px;
+    margin: 0 auto;
+}
+
+.factory {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background: url("../factory/factory.jpg") center/cover no-repeat;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px #0002;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    z-index: 2;
+}
+
+.factory-tile {
     width: 38px;
     height: 38px;
     border-radius: 8px;
     background-size: cover;
     background-position: center;
+    margin: 2px;
     border: 1.5px solid #ccc;
     box-shadow: 0 1px 4px rgba(0,83,119,0.10);
+}
+
+#table-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120px;
+    height: 120px;
+    transform: translate(-50%, -50%);
+    background: #fff8;
+    border-radius: 50%;
+    box-shadow: 0 2px 16px #00537733;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    border: 3px solid var(--azul-gold);
+}
+
+.center-tile {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    margin: 2px;
+    border: 1.5px solid #ccc;
+    box-shadow: 0 1px 4px rgba(0,83,119,0.10);
+}
+
+#boards-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
 }
 
 #boards {
@@ -116,18 +149,19 @@ main {
 }
 
 .player-board {
-    background: #fff;
-    border: 2.5px solid var(--azul-primary);
+    background: url("../images/background board texture.jpg") center/cover no-repeat;
+    border: 2.5px solid var(--azul-blue);
     border-radius: 16px;
     padding: 18px 14px 14px 14px;
     min-width: 270px;
-    box-shadow: 0 2px 8px rgba(0,83,119,0.08);
+    box-shadow: var(--azul-shadow);
     margin-bottom: 18px;
     position: relative;
+    min-height: 280px;
 }
 
 .player-board.active {
-    border-color: var(--azul-accent);
+    border-color: var(--azul-gold);
     box-shadow: 0 0 16px #f4a26150;
 }
 
@@ -163,21 +197,28 @@ main {
 .score {
     font-size: 1.2em;
     font-weight: bold;
-    color: var(--azul-primary);
+    color: var(--azul-blue);
     margin-bottom: 4px;
 }
 
 .player-name {
     font-weight: bold;
     margin-bottom: 2px;
-    color: var(--azul-secondary);
+    color: var(--azul-blue);
 }
 
 .turn-indicator {
-    color: var(--azul-accent);
+    color: var(--azul-gold);
     font-weight: bold;
     margin-top: 6px;
     font-size: 1.12em;
+    text-shadow: 0 1px 4px #fff7;
+    animation: pulseTurn 1s infinite alternate;
+}
+
+@keyframes pulseTurn {
+    from { text-shadow: 0 0 0 #f4a261; }
+    to   { text-shadow: 0 0 10px #f4a261; }
 }
 
 footer {
@@ -205,18 +246,34 @@ footer {
     box-shadow: 0 4px 16px rgba(211,47,47,0.18);
 }
 
+#notification {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--azul-gold);
+    color: var(--azul-blue);
+    font-weight: bold;
+    padding: 12px 32px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px #f4a26133;
+    z-index: 100;
+    display: none;
+    font-size: 1.2em;
+}
+
 @media (max-width: 900px) {
-    main {
-        flex-direction: column;
-        gap: 18px;
+    #factory-circle {
+        width: 320px;
+        height: 320px;
+    }
+    .factory, #table-center {
+        width: 70px;
+        height: 70px;
     }
     #boards {
         flex-direction: column;
         gap: 18px;
-    }
-    #factories, #center {
-        flex-wrap: wrap;
-        gap: 10px;
     }
 }
 

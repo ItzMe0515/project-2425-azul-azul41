@@ -2,24 +2,27 @@
 
 // === Asset Directory Constants ===
 const TILE_IMAGE_DIR = 'assets/tiles/';
-const BACKGROUND_IMAGE = 'assets/images/red background.png';
+const FACTORY_BG_IMAGE = 'assets/factory/factory.jpg';
+const BOARD_BG_IMAGE = 'assets/images/background board texture.jpg';
+const BACKGROUND_IMAGE = 'assets/images/azul-bg.jpg';
 
 const TILE_IMAGES = {
     PlainBlue: TILE_IMAGE_DIR + 'blue.png',
     YellowRed: TILE_IMAGE_DIR + 'yellow.png',
     BlackBlue: TILE_IMAGE_DIR + 'black.png',
-    WhiteTurquoise: TILE_IMAGE_DIR + 'lightblue.png', // No spaces in filename!
+    WhiteTurquoise: TILE_IMAGE_DIR + 'lightblue.png',
     PlainRed: TILE_IMAGE_DIR + 'red.png',
     StartingTile: TILE_IMAGE_DIR + 'token.jpg'
 };
 
 const API_BASE = 'https://localhost:5051/api';
 const urlParams = new URLSearchParams(window.location.search);
-const gameId = urlParams.get('gameId') || urlParams.get('tableId'); // Support both
+let gameId = urlParams.get('gameId');
+const tableId = urlParams.get('tableId');
 
-// Set background image dynamically for extra robustness
+// Set main background image
 window.addEventListener('DOMContentLoaded', () => {
-    document.body.style.background = `none`; // Remove default
+    document.body.style.background = `none`;
     document.body.style.backgroundImage = `url('${BACKGROUND_IMAGE}')`;
     document.body.style.backgroundSize = 'cover';
     document.body.style.backgroundPosition = 'center';
@@ -34,68 +37,59 @@ function getCurrentUser() {
     return user ? JSON.parse(user) : null;
 }
 
-async function fetchGameWithRetry(gameId, maxRetries = 10, delayMs = 1000) {
-    let attempt = 0;
-    while (attempt < maxRetries) {
-        try {
-            const response = await fetch(`${API_BASE}/Games/${gameId}`, {
-                headers: { 'Authorization': 'Bearer ' + getAuthToken() }
-            });
-            if (response.ok) {
-                return await response.json();
-            }
-            // If not found, wait and retry
-            if (response.status === 404) {
-                attempt++;
-                await new Promise(res => setTimeout(res, delayMs));
-                continue;
-            }
-            // For other errors, throw
-            throw new Error('Failed to fetch game');
-        } catch (err) {
-            attempt++;
-            await new Promise(res => setTimeout(res, delayMs));
-        }
-    }
-    throw new Error('Game not found after multiple attempts.');
+function showNotification(msg, duration = 2000) {
+    const notif = document.getElementById('notification');
+    notif.textContent = msg;
+    notif.style.display = 'block';
+    setTimeout(() => { notif.style.display = 'none'; }, duration);
 }
 
-function renderFactories(factories) {
-    const factoriesDiv = document.getElementById('factories');
-    factoriesDiv.innerHTML = '';
-    if (!factories || !Array.isArray(factories)) return;
+// --- Factories & Center in a Circle ---
+function renderFactoryCircle(factories, center) {
+    const circleDiv = document.getElementById('factory-circle');
+    circleDiv.innerHTML = '';
+
+    const n = factories.length;
+    const radius = 200; // px
+    const cx = 240, cy = 240;
+
+    // Render factories in a circle
     factories.forEach((factory, i) => {
+        const angle = ((2 * Math.PI) / n) * i - Math.PI / 2;
+        const x = cx + radius * Math.cos(angle) - 55;
+        const y = cy + radius * Math.sin(angle) - 55;
         const div = document.createElement('div');
         div.className = 'factory';
+        div.style.left = `${x}px`;
+        div.style.top = `${y}px`;
+        div.style.backgroundImage = `url('${FACTORY_BG_IMAGE}')`;
         div.innerHTML = (factory.tiles || []).map(tile =>
             `<div class="factory-tile" style="background-image:url('${TILE_IMAGES[tile] || ''}')" title="${tile}"></div>`
         ).join('');
-        div.setAttribute('data-factory-index', i);
-        factoriesDiv.appendChild(div);
+        circleDiv.appendChild(div);
     });
+
+    // Render center in the middle
+    const centerDiv = document.createElement('div');
+    centerDiv.id = 'table-center';
+    centerDiv.innerHTML = (center.tiles || []).map(tile =>
+        `<div class="center-tile" style="background-image:url('${TILE_IMAGES[tile] || ''}')" title="${tile}"></div>`
+    ).join('');
+    circleDiv.appendChild(centerDiv);
 }
 
-function renderCenter(center) {
-    const centerDiv = document.getElementById('center');
-    centerDiv.innerHTML = '';
-    if (!center || !Array.isArray(center.tiles)) return;
-    center.tiles.forEach(tile => {
-        const div = document.createElement('div');
-        div.className = 'center-tile';
-        div.style.backgroundImage = `url('${TILE_IMAGES[tile] || ''}')`;
-        div.title = tile;
-        centerDiv.appendChild(div);
-    });
-}
-
-function renderBoards(players, currentPlayerId) {
+// --- Boards ---
+function renderBoards(players, currentPlayerId, playerToPlayId) {
     const boardsDiv = document.getElementById('boards');
     boardsDiv.innerHTML = '';
     if (!players || !Array.isArray(players)) return;
     players.forEach(player => {
         const boardDiv = document.createElement('div');
         boardDiv.className = 'player-board' + (player.id === currentPlayerId ? ' active' : '');
-        // Defensive: handle missing board
+        boardDiv.style.backgroundImage = `url('${BOARD_BG_IMAGE}')`;
+        boardDiv.style.backgroundSize = 'cover';
+        boardDiv.style.backgroundPosition = 'center';
+
         let patternLinesHtml = '';
         if (player.board && Array.isArray(player.board.patternLines)) {
             patternLinesHtml = player.board.patternLines.map((line, idx) =>
@@ -121,46 +115,89 @@ function renderBoards(players, currentPlayerId) {
             ).join('');
         }
         boardDiv.innerHTML = `
-            <div class="player-name">${player.name}</div>
-            <div class="score">Score: ${player.score ?? 0}</div>
+            <div class="player-name">
+                ${player.name}
+                ${player.id === playerToPlayId ? '<span class="turn-indicator">🎯 TURN</span>' : ''}
+            </div>
+            <div class="score">Score: ${player.board?.score ?? 0}</div>
             <div class="pattern-lines">${patternLinesHtml}</div>
             <div class="wall">${wallHtml}</div>
             <div class="floor-line">Floor: ${floorHtml}</div>
-            ${player.isCurrentTurn ? '<div class="turn-indicator">🎯 Your Turn!</div>' : ''}
+            ${player.hasStartingTile ? '<div class="turn-indicator">🏅 Has Starting Tile</div>' : ''}
         `;
         boardsDiv.appendChild(boardDiv);
     });
 }
 
+// --- Game Rendering ---
 function renderGame(game) {
     document.getElementById('game-id').textContent = `Game ID: ${game.id}`;
-    document.getElementById('current-turn').textContent = `Current turn: ${game.currentPlayerName || ''}`;
-    renderFactories(game.tileFactory?.factories);
-    renderCenter(game.tileFactory?.tableCenter);
-    renderBoards(game.players, getCurrentUser()?.id);
+    document.getElementById('round-info').textContent = `Round: ${game.roundNumber}`;
+    const currentPlayer = game.players.find(p => p.id === game.playerToPlayId);
+    document.getElementById('turn-indicator').textContent = currentPlayer
+        ? `Current Turn: ${currentPlayer.name}`
+        : '';
+    renderFactoryCircle(game.tileFactory?.displays, game.tileFactory?.tableCenter);
+    renderBoards(game.players, getCurrentUser()?.id, game.playerToPlayId);
 }
 
-let consecutiveErrors = 0;
-const MAX_CONSECUTIVE_ERRORS = 3;
+// --- API ---
+async function fetchTable(tableId) {
+    const response = await fetch(`${API_BASE}/Tables/${tableId}`, {
+        headers: { 'Authorization': 'Bearer ' + getAuthToken() }
+    });
+    if (!response.ok) throw new Error('Failed to fetch table');
+    return await response.json();
+}
 
-async function pollGameState() {
-    try {
-        const game = await fetchGameWithRetry(gameId, 2, 1000); // fewer retries for polling
-        renderGame(game);
-        consecutiveErrors = 0;
-        setTimeout(pollGameState, 2000);
-    } catch (err) {
-        consecutiveErrors++;
-        if (consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
-            alert('Unable to join game. Please try again later.');
-            await leaveGame();
-        } else {
-            // Try again after a short delay
-            setTimeout(pollGameState, 2000);
-        }
+async function pollForGameId() {
+    if (!tableId) return;
+    while (true) {
+        try {
+            const table = await fetchTable(tableId);
+            if (table.gameId && table.gameId !== '00000000-0000-0000-0000-000000000000') {
+                window.location.href = `game.html?gameId=${table.gameId}`;
+                return;
+            }
+        } catch (err) {}
+        showNotification("Waiting for game to start...", 1000);
+        await new Promise(res => setTimeout(res, 2000));
     }
 }
 
+async function fetchGameWithRetry(gameId, maxRetries = 2, delayMs = 1000) {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+        try {
+            const response = await fetch(`${API_BASE}/Games/${gameId}`, {
+                headers: { 'Authorization': 'Bearer ' + getAuthToken() }
+            });
+            if (response.ok) {
+                return await response.json();
+            }
+            if (response.status === 404) {
+                attempt++;
+                await new Promise(res => setTimeout(res, delayMs));
+                continue;
+            }
+            throw new Error('Failed to fetch game');
+        } catch (err) {
+            attempt++;
+            await new Promise(res => setTimeout(res, delayMs));
+        }
+    }
+    throw new Error('Game not found after multiple attempts.');
+}
+
+async function pollGameState() {
+    try {
+        const game = await fetchGameWithRetry(gameId, 2, 1000);
+        renderGame(game);
+        setTimeout(pollGameState, 2000);
+    } catch (err) {
+        setTimeout(pollGameState, 2000);
+    }
+}
 
 async function leaveGame() {
     const tableId = localStorage.getItem('tableId');
@@ -175,13 +212,20 @@ async function leaveGame() {
         } catch (err) {}
         localStorage.removeItem('tableId');
     }
-    // Also remove any gameId or related info
     localStorage.removeItem('gameId');
-    window.location.href = '../lobby page/lobby.html';
+    localStorage.removeItem('currentTableId');
+    localStorage.removeItem('currentTableSeats');
+    // Redirect to the game selection page (not the waiting room or lobby)
+    window.location.href = '../lobby page/lobby.html'; // or your actual game selection page
 }
 
 
+// --- DOM Ready ---
 window.addEventListener('DOMContentLoaded', () => {
-    pollGameState();
+    if (!gameId && tableId) {
+        pollForGameId();
+    } else if (gameId) {
+        pollGameState();
+    }
     document.getElementById('leave-game').addEventListener('click', leaveGame);
 });

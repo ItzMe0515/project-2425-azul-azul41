@@ -12,7 +12,9 @@ public class FactoryDisplayModel
     {
         public MappingProfile()
         {
-            CreateMap<IFactoryDisplay, FactoryDisplayModel>();
+            CreateMap<IFactoryDisplay, FactoryDisplayModel>()
+            .ForMember(dest => dest.Tiles, opt => opt.MapFrom(src => src.Tiles.ToList()));
+
         }
     }
 }

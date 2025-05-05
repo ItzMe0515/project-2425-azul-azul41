@@ -20,7 +20,9 @@ public class PlayerModel
     {
         public MappingProfile()
         {
-            CreateMap<IPlayer, PlayerModel>();
+            CreateMap<IPlayer, PlayerModel>()
+            .ForMember(dest => dest.Board, opt => opt.MapFrom(src => src.Board))
+            .ForMember(dest => dest.TilesToPlace, opt => opt.MapFrom(src => src.TilesToPlace.ToList()));
             CreateMap<IBoard, BoardModel>();
             CreateMap<IPatternLine, PatternLineModel>();
             CreateMap<TileSpot,  TileSpotModel>();
