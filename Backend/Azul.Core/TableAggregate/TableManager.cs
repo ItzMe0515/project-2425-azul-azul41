@@ -32,18 +32,61 @@ internal class TableManager : ITableManager
     {
         //Find a table with available seats that matches the given preferences
         //If no table is found, create a new table. Otherwise, take the first available table
-        throw new NotImplementedException();
+
+        var availableTables = _tableRepository.FindTablesWithAvailableSeats(preferences);
+
+        ITable table = availableTables.FirstOrDefault();
+
+        if(table == null)
+        {
+            table = _tableFactory.CreateNewForUser(user, preferences);
+            _tableRepository.Add(table);
+        }
+        else
+        {
+            table.Join(user);
+        }
+
+        return table;
     }
 
     public void LeaveTable(Guid tableId, User user)
     {
-        throw new NotImplementedException();
+        var table = _tableRepository.Get(tableId);
+        if(table == null)
+        {
+            throw new InvalidOperationException("Table not found.");
+        }
+        table.Leave(user.Id);
+
+        if (table.SeatedPlayers.Count == 0)
+        {
+            _tableRepository.Remove(tableId);
+        }
+            
     }
 
 
     public IGame StartGameForTable(Guid tableId)
     {
-        throw new NotImplementedException();
+        var table = _tableRepository.Get(tableId);
+
+        if(table == null)
+        {
+            throw new InvalidOperationException("Table not found.");
+        }
+
+        if(table.SeatedPlayers.Count != table.Preferences.NumberOfPlayers)
+        {
+            throw new InvalidOperationException("Not enough players yet");
+        }
+
+        var game = _gameFactory.CreateNewForTable(table);
+
+        _gameRepository.Add(game);
+        table.GameId = game.Id;
+
+        return game;
     }
 
     public void FillWithArtificialPlayers(Guid tableId, User user)

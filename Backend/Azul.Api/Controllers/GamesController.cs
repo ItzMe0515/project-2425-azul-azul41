@@ -2,6 +2,7 @@
 using Azul.Api.Models.Input;
 using Azul.Api.Models.Output;
 using Azul.Core.GameAggregate.Contracts;
+using Azul.Core.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -33,9 +34,16 @@ namespace Azul.Api.Controllers
         [ProducesResponseType(typeof(ErrorModel), StatusCodes.Status400BadRequest)]
         public IActionResult GetGame(Guid id)
         {
-            IGame game = _gameService.GetGame(id);
-            GameModel gameModel = _mapper.Map<GameModel>(game);
-            return Ok(gameModel);
+            try
+            {
+                IGame game = _gameService.GetGame(id);
+                GameModel gameModel = _mapper.Map<GameModel>(game);
+                return Ok(gameModel);
+            }
+            catch (DataNotFoundException)
+            {
+                return NotFound(); // <-- This is the essential fix!
+            }
         }
 
         /// <summary>

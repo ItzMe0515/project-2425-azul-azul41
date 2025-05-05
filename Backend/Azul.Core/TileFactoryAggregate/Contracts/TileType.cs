@@ -2,10 +2,11 @@
 
 public enum TileType
 {
-    StartingTile = 0,
-    PlainBlue = 11,
-    YellowRed = 12,
-    PlainRed = 13,
-    BlackBlue = 14,
-    WhiteTurquoise = 15,
+    
+    PlainBlue = 0,
+    YellowRed = 1,
+    PlainRed = 2,
+    BlackBlue = 3,
+    WhiteTurquoise = 4,
+    StartingTile = 10
 }

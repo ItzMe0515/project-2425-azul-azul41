@@ -10,38 +10,47 @@
 <div class="azul-bg"></div>
 <div class="lobby-container">
     <h1>Welcome to the Azul Lobby</h1>
-    <div class="lobby-card">
-        <div id="user-info">
-            <span class="user-avatar">👤</span>
-            <span class="username">Logged in as: <strong id="username">[User]</strong></span>
+    <div id="user-info">
+        <span class="user-avatar">👤</span>
+        <span class="username">Logged in as: <strong id="username">[User]</strong></span>
+    </div>
+    <form id="game-type-form">
+        <label for="player-count">Select number of players:</label>
+        <div class="player-select">
+            <button type="button" class="player-btn" data-count="2">2</button>
+            <button type="button" class="player-btn" data-count="3">3</button>
+            <button type="button" class="player-btn" data-count="4">4</button>
         </div>
-        <form id="game-type-form">
-            <label for="player-count">Select number of players:</label>
-            <div class="player-select">
-                <button type="button" class="player-btn" data-count="2">2</button>
-                <button type="button" class="player-btn" data-count="3">3</button>
-                <button type="button" class="player-btn" data-count="4">4</button>
-            </div>
-            <input type="hidden" name="player-count" id="player-count" value="">
-            <div id="lobby-error" class="lobby-error"></div>
-            <button type="submit" id="join-btn" disabled>Find or Create Table</button>
-        </form>
-        <div id="table-status" class="hidden">
-            <h2>Table Status</h2>
-            <div class="table-info">
-                <span class="table-id">Table: <strong id="table-id">-</strong></span>
-                <span class="seats">
+        <input type="hidden" name="player-count" id="player-count" value="">
+        <div id="lobby-error" class="lobby-error" style="display:none;"></div>
+        <button type="submit" id="join-btn" disabled>Find or Create Table</button>
+    </form>
+    <div id="waiting-room" class="hidden">
+        <div class="waiting-card">
+            <div class="table-status">
+                <div class="table-header">
+                    <span class="table-id">Table: <strong id="table-id">-</strong></span>
+                    <span class="seats">
                         <span id="seats-taken">0</span> / <span id="seats-total">0</span> seats taken
                     </span>
-            </div>
-            <div class="waiting-message">
-                Waiting for other players...
-            </div>
-            <div class="players-list">
-                <h3>Players at this table:</h3>
-                <ul id="players">
-                    <!-- Dynamically filled by JS -->
-                </ul>
+                </div>
+                <div class="joined-message">
+                    🎉 You have joined the table!
+                </div>
+                <div class="players-list">
+                    <h3>Players at this table:</h3>
+                    <ul id="players">
+                        <!-- Dynamically filled by JS -->
+                    </ul>
+                </div>
+                <div class="waiting-animation">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="waiting-text">Waiting for other players...</span>
+                </div>
+                <button class="leave-btn" id="leave-btn" type="button">Leave Table</button>
+                <div id="waiting-error" class="lobby-error" style="display:none;"></div>
             </div>
         </div>
     </div>

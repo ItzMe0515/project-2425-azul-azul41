@@ -8,12 +8,24 @@ namespace Azul.Core.TableAggregate
     {
 
         [DefaultValue(2)]
-        public int NumberOfPlayers { get; set; }
+        public int NumberOfPlayers { get; set; } = 2;
 
         [DefaultValue(0)]
-        public int NumberOfArtificialPlayers { get; set; }
+        public int NumberOfArtificialPlayers { get; set; } = 0;
 
-        public int NumberOfFactoryDisplays { get; }
+        public int NumberOfFactoryDisplays
+        {
+            get
+            {
+                return NumberOfPlayers switch
+                {
+                    2 => 5,
+                    3 => 7,
+                    4 => 9,
+                    _ => 0
+                };
+            }
+        }
 
 
         //DO NOT CHANGE THE CODE BELOW, unless (maybe) when you are working on EXTRA requirements

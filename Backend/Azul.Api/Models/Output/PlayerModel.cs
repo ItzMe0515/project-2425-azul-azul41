@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Azul.Core.BoardAggregate.Contracts;
 using Azul.Core.PlayerAggregate.Contracts;
 using Azul.Core.TileFactoryAggregate.Contracts;
+using Azul.Core.BoardAggregate;
+using Azul.Core.PlayerAggregate;
 
 namespace Azul.Api.Models.Output;
 
@@ -18,6 +21,9 @@ public class PlayerModel
         public MappingProfile()
         {
             CreateMap<IPlayer, PlayerModel>();
+            CreateMap<IBoard, BoardModel>();
+            CreateMap<IPatternLine, PatternLineModel>();
+            CreateMap<TileSpot,  TileSpotModel>();
         }
     }
 }

@@ -56,7 +56,7 @@ public class TablesController : ApiControllerBase
         User currentUser = (await _userManager.GetUserAsync(User))!;
         ITable table = _tableManager.JoinOrCreateTable(currentUser, preferences);
 
-        if(!table.HasAvailableSeat)
+        if(table.SeatedPlayers.Count == table.Preferences.NumberOfPlayers)
         {
             _tableManager.StartGameForTable(table.Id);
         }
