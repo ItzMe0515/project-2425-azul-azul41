@@ -14,6 +14,8 @@ public class TileSpotModelMappingProfile : Profile
 {
     public TileSpotModelMappingProfile()
     {
-        CreateMap<TileSpot, TileSpotModel>();
+        CreateMap<TileSpot, TileSpotModel>()
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.HasValue ? src.Type.Value.ToString() : null));
     }
 }
+

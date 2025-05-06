@@ -138,9 +138,9 @@ function renderBoards(players, currentPlayerId, playerToPlayId) {
         }
         let wallHtml = '';
         if (player.board && Array.isArray(player.board.wall)) {
-            wallHtml = player.board.wall.map(row =>
-                `<div class="wall-row">${(row || []).map(tile =>
-                    `<div class="wall-tile" style="background-image:url('${TILE_IMAGES[tile] || ''}')"></div>`
+            wallHtml = Array.from(player.board.wall).map(row =>
+                `<div class="wall-row">${Array.from(row).map(tileSpot =>
+                    `<div class="wall-tile" style="background-image:url('${TILE_IMAGES[tileSpot.Type] || ''}')"></div>`
                 ).join('')}</div>`
             ).join('');
         } else {
@@ -148,8 +148,8 @@ function renderBoards(players, currentPlayerId, playerToPlayId) {
         }
         let floorHtml = '';
         if (player.board && Array.isArray(player.board.floorLine)) {
-            floorHtml = player.board.floorLine.map(tile =>
-                `<div class="floor-tile" style="background-image:url('${TILE_IMAGES[tile] || ''}')"></div>`
+            floorHtml = player.board.floorLine.map(tileSpot =>
+                `<div class="floor-tile" style="background-image:url('${TILE_IMAGES[tileSpot.Type] || ''}')"></div>`
             ).join('');
         } else {
             console.error(`Player ${idx} (${player.name}) has no board or floorLine:`, player.board);
