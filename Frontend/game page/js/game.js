@@ -108,15 +108,9 @@ function renderFactoryCircle(factories, center) {
 // --- Boards ---
 function renderBoards(players, currentPlayerId, playerToPlayId) {
     const boardsDiv = document.getElementById('boards');
-    if (!boardsDiv) {
-        console.warn('No boardsDiv found in DOM!');
-        return;
-    }
+    if (!boardsDiv) return;
     boardsDiv.innerHTML = '';
-    if (!players || !Array.isArray(players)) {
-        console.error('Players data is missing or not an array:', players);
-        return;
-    }
+    if (!players || !Array.isArray(players)) return;
     players.forEach((player, idx) => {
         const boardDiv = document.createElement('div');
         boardDiv.className = 'player-board' + (player.id === currentPlayerId ? ' active' : '');
@@ -124,36 +118,40 @@ function renderBoards(players, currentPlayerId, playerToPlayId) {
         boardDiv.style.backgroundSize = 'cover';
         boardDiv.style.backgroundPosition = 'center';
 
+        // Pattern lines: array of arrays of tile names (strings)
         let patternLinesHtml = '';
         if (player.board && Array.isArray(player.board.patternLines)) {
-            patternLinesHtml = player.board.patternLines.map((line, idx) =>
+            patternLinesHtml = player.board.patternLines.map((patternLine, idx) =>
                 `<div class="pattern-line">${
-                    (Array.isArray(line) ? line : []).map(tile =>
+                    (Array.isArray(patternLine.tiles) ? patternLine.tiles : []).map(tile =>
                         `<div class="pattern-tile" style="background-image:url('${TILE_IMAGES[tile] || ''}')"></div>`
                     ).join('')
-                }${'<div class="pattern-tile empty"></div>'.repeat(Math.max(0, idx + 1 - (line ? line.length : 0)))}</div>`
+                }${'<div class="pattern-tile empty"></div>'.repeat(Math.max(0, idx + 1 - (patternLine.tiles ? patternLine.tiles.length : 0)))}</div>`
             ).join('');
-        } else {
-            console.error(`Player ${idx} (${player.name}) has no board or patternLines:`, player.board);
         }
+
+        // Wall: 2D array of TileSpotModel, use tileSpot.type for image, only if hasTile
         let wallHtml = '';
-        if (player.board && Array.isArray(player.board.wall)) {
+        if (player.board && player.board.wall) {
             wallHtml = Array.from(player.board.wall).map(row =>
                 `<div class="wall-row">${Array.from(row).map(tileSpot =>
-                    `<div class="wall-tile" style="background-image:url('${TILE_IMAGES[tileSpot.Type] || ''}')"></div>`
+                    tileSpot.hasTile && tileSpot.type
+                        ? `<div class="wall-tile" style="background-image:url('${TILE_IMAGES[tileSpot.type] || ''}')"></div>`
+                        : `<div class="wall-tile"></div>`
                 ).join('')}</div>`
             ).join('');
-        } else {
-            console.error(`Player ${idx} (${player.name}) has no board or wall:`, player.board);
         }
+
+        // Floor line: array of TileSpotModel, use tileSpot.type for image, only if hasTile
         let floorHtml = '';
         if (player.board && Array.isArray(player.board.floorLine)) {
             floorHtml = player.board.floorLine.map(tileSpot =>
-                `<div class="floor-tile" style="background-image:url('${TILE_IMAGES[tileSpot.Type] || ''}')"></div>`
+                tileSpot.hasTile && tileSpot.type
+                    ? `<div class="floor-tile" style="background-image:url('${TILE_IMAGES[tileSpot.type] || ''}')"></div>`
+                    : `<div class="floor-tile"></div>`
             ).join('');
-        } else {
-            console.error(`Player ${idx} (${player.name}) has no board or floorLine:`, player.board);
         }
+
         boardDiv.innerHTML = `
             <div class="player-name">
                 ${player.name}
@@ -166,9 +164,11 @@ function renderBoards(players, currentPlayerId, playerToPlayId) {
             ${player.hasStartingTile ? '<div class="turn-indicator">🏅 Has Starting Tile</div>' : ''}
         `;
         boardsDiv.appendChild(boardDiv);
-        console.log(`Player ${idx} (${player.name}) board:`, player.board);
     });
 }
+
+
+
 
 // --- Game Rendering ---
 function renderGame(game) {

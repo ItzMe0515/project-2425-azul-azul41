@@ -6,7 +6,7 @@ namespace Azul.Api.Models.Output;
 public class FactoryDisplayModel
 {
     public Guid Id { get; set; }
-    public List<TileType> Tiles { get; set; }
+    public List<string> Tiles { get; set; }
 }
 
 public class FactoryDisplayModelMappingProfile : Profile
