@@ -11,13 +11,13 @@ namespace Azul.Api.Models.Output
         public List<PlayerModel> SeatedPlayers { get; set; } = new List<PlayerModel>();
         public bool HasAvailableSeat { get; set; }
         public Guid GameId { get; set; }
+    }
 
-        private class MappingProfile : Profile
+    public class TableModelMappingProfile : Profile
+    {
+        public TableModelMappingProfile()
         {
-            public MappingProfile()
-            {
-                CreateMap<ITable, TableModel>();
-            }
+            CreateMap<ITable, TableModel>();
         }
     }
 }

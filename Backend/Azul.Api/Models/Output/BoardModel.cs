@@ -10,12 +10,16 @@ public class BoardModel
     public TileSpotModel[,] Wall { get; set; }
     public TileSpotModel[] FloorLine { get; set; }
     public int Score { get; set; }
+}
 
-    private class MappingProfile : Profile
+public class BoardModelMappingProfile : Profile
+{
+    public BoardModelMappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<IBoard, BoardModel>();
-        }
+        CreateMap<IBoard, BoardModel>()
+            .ForMember(dest => dest.PatternLines, opt => opt.MapFrom(src => src.PatternLines))
+            .ForMember(dest => dest.Wall, opt => opt.MapFrom(src => src.Wall))
+            .ForMember(dest => dest.FloorLine, opt => opt.MapFrom(src => src.FloorLine))
+            .ForMember(dest => dest.Score, opt => opt.MapFrom(src => src.Score));
     }
 }

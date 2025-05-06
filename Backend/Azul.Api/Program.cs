@@ -112,7 +112,7 @@ namespace Azul.Api
 
             builder.Services.AddAuthorization();
 
-            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddSingleton<ITokenFactory>(new JwtTokenFactory(tokenSettings));
             builder.Services.AddCore(configuration);
             builder.Services.AddInfrastructure(configuration);

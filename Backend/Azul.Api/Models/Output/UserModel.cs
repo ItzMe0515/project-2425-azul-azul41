@@ -9,12 +9,12 @@ public class UserModel
     public string Email { get; set; }
     public string UserName { get; set; }
     public DateOnly? LastVisitToPortugal { get; set; }
+}
 
-    private class MappingProfile : Profile
+public class UserModelMappingProfile : Profile
+{
+    public UserModelMappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<User, UserModel>();
-        }
+        CreateMap<User, UserModel>();
     }
 }

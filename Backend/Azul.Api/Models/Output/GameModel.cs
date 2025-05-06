@@ -11,12 +11,12 @@ public class GameModel
     public TileFactoryModel TileFactory { get; set; }
     public int RoundNumber { get; set; }
     public bool HasEnded { get; set; }
+}
 
-    private class MappingProfile : Profile
+public class GameModelMappingProfile : Profile
+{
+    public GameModelMappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<IGame, GameModel>();
-        }
+        CreateMap<IGame, GameModel>();
     }
 }

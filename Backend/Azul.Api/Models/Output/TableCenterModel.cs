@@ -5,13 +5,15 @@ namespace Azul.Api.Models.Output;
 
 public class TableCenterModel : FactoryDisplayModel
 {
-    private class MappingProfile : Profile
+}
+
+public class TableCenterModelMappingProfile : Profile
+{
+    public TableCenterModelMappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<ITableCenter, TableCenterModel>()
+        CreateMap<ITableCenter, TableCenterModel>()
             .IncludeBase<IFactoryDisplay, FactoryDisplayModel>()
-            .ForMember(dest => dest.Tiles, opt => opt.MapFrom(src => src.Tiles.ToList()));
-        }
+            .ForMember(dest => dest.Tiles, opt => opt.MapFrom(src => src.Tiles.Select(t => t.ToString()).ToList()));
     }
 }
+

@@ -10,12 +10,14 @@ public class PatternLineModel
     public TileType? TileType { get; set; }
     public int NumberOfTiles { get; set; }
     public bool IsComplete { get; set; }
+}
 
-    private class MappingProfile : Profile
+public class PatternLineModelMappingProfile : Profile
+{
+    public PatternLineModelMappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<IPatternLine, PatternLineModel>();
-        }
+        CreateMap<IPatternLine, PatternLineModel>()
+            .ForMember(dest => dest.TileType, opt => opt.MapFrom(src => src.TileType.HasValue ? src.TileType.Value.ToString() : null));
     }
 }
+

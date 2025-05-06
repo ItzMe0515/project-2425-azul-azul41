@@ -8,12 +8,12 @@ public class TileSpotModel
 {
     public TileType? Type { get; set; }
     public bool HasTile { get; set; }
+}
 
-    private class MappingProfile : Profile
+public class TileSpotModelMappingProfile : Profile
+{
+    public TileSpotModelMappingProfile()
     {
-        public MappingProfile()
-        {
-            CreateMap<TileSpot, TileSpotModel>();
-        }
+        CreateMap<TileSpot, TileSpotModel>();
     }
 }
